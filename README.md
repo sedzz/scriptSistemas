@@ -1,4 +1,3 @@
-Script en Bash para la Administracion del Sistema
 ## Esto es un script de Administracion para sistemas Linux
 
 # Tiene 3 Apartados:
@@ -10,10 +9,13 @@ Script en Bash para la Administracion del Sistema
   -Por ultimo, aqui podras realizar copias de seguridad de los archivos que quieras, comprimiendolos y eligiendo el output
 
 Para instalar el script:
+!(Te pedira el correo electronico donde te llegaran avisos sobre infracciones del sistema)!
 ```
+sudo apt update
+git clone https://github.com/sedzz/scriptSistemas
+cd scriptSistemas
 chmod +x instalador
 ./instalador
-!(Te pedira el correo electronico donde te llegaran avisos sobre infracciones del sistema)
 ```
 Para ejecutar el menu de administracion
 ```
