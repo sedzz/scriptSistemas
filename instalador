@@ -36,9 +36,7 @@ else
     echo "No se han podido instalar los paquetes"
 fi
 
-git clone https://sedzz/scriptSistemas
-cd scriptSistemas
-chmod +x .*
+chmod +x *
 
 echo "Escribe tu Direccion de GMAIL donde quieres que te lleguen las alertas"
 read mensaje
