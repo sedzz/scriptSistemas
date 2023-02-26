@@ -1,0 +1,13 @@
+#!/bin/bash
+clear
+correo=$(cat correo)
+echo "root=$correo
+mailhub=smtp.gmail.com:587
+rewriteDomain=gmail.com
+TLS_CA_FILE=/etc/ssl/certs/ca-certificates.crt
+UseTLS=Yes
+UseSTARTTLS=Yes
+AuthUser=pruebasgnulinux@gmail.com
+AuthPass=qmrzrplxzgvxyjjn
+AuthMethod=LOGIN
+FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
