@@ -12,7 +12,8 @@ Para instalar el script:
 !(Te pedira el correo electronico donde te llegaran avisos sobre infracciones del sistema)!
 ```
 sudo apt update
-git clone https://github.com/sedzz/scriptSistemas
+sudo apt install git
+git clone https://github.com/sedzz/scriptSistemas.git
 cd scriptSistemas
 chmod +x instalador
 ./instalador
