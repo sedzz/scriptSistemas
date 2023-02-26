@@ -1,0 +1,16 @@
+#!/bin/bash
+service=$(zenity --forms --title="Servicios" \
+											--text="Introduce el servicio a buscar:" \
+											--add-entry="Numero")
+
+if [ $? -ne 0 ]; then
+    exit 0
+fi
+systemctl status $service
+if [ $? -ne 0 ];then
+	clear
+	zenity --info --text "El servicio $service no existe"
+	exit 0
+fi
+status=$(systemctl status $service --no-pager | grep "Active:" | awk '{print $2}')
+zenity --info --title "Estado del servicio $service" --text "El estado actual del servicio $service es: $status" --height 200 --width 400

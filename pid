@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ps -A | awk '{print $1":"$4}' > pids
+zenity --title "Procesos" --text-info --filename=./pids --ok-label="Aceptar"
+
+PID=$(zenity --forms --title="PID"  \
+											--text="Selecciona el PID a matar" \
+											--add-entry="Numero")
+
+if [[ -n $PID ]]; then
+  source funciones 
+  
+  
+  permisos
+  sudo kill $PID
+  if [ $? -ne 0 ];then
+    clear
+    zenity --error --text "PID no valido"
+    exit 0
+  fi
+  zenity --info --text "El proceso con PID $PID ha sido terminado."
+else
+  zenity --error --text "No se ha seleccionado ningún PID."
+fi

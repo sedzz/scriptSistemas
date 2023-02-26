@@ -1,0 +1,45 @@
+#!/bin/bash
+
+ifconfig -a
+source funciones
+
+interfaces=$(ip link show | awk -F': ' '{print $2}' | grep -v 'lo')
+interface=$(zenity --list --title "Selecciona la interfaz de red" --column "Interfaces de red" $interfazConIp $interfaces 2>/dev/null)
+
+if [ $? -ne 0 ]; then
+    exit 0
+fi
+
+input=$(zenity --forms --title "Configuración de red para $interface" --text "Ingresa la dirección IP y la máscara de subred" \
+    --add-entry "Dirección IP" \
+    --add-entry "Máscara de subred" \
+    2>/dev/null)
+
+if [ $? -ne 0 ]; then
+    exit 0
+fi
+
+ip_address=$(echo $input | awk -F'|' '{print $1}')
+subnet_mask=$(echo $input | awk -F'|' '{print $2}')
+
+if [[ -z $ip_address || -z $subnet_mask ]]; then
+    zenity --error --text "Debes ingresar la dirección IP y la máscara de subred"
+    exit 0
+fi
+
+if ! [[ $ip_address =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    zenity --error --text "La dirección IP no es válida"
+    exit 0
+fi
+
+if ! [[ $subnet_mask =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    zenity --error --text "La máscara de subred no es válida"
+    exit 0
+fi
+
+permisos
+sudo ip addr flush dev $interface
+sudo ip addr add $ip_address/$subnet_mask dev $interface
+clear
+zenity --info --text "La configuración de red para $interface se ha actualizado:\nDirección IP: $ip_address\nMáscara de subred: $subnet_mask"
+clear

@@ -1,0 +1,95 @@
+#!/bin/bash
+
+source funciones
+eleccion=$(zenity --list \
+			--column="Opcion" --column="Accion" --height 250 --width 500 \
+			1 "Ver Hosts de una Red(IP / MAC)"  \
+			2 "Ver S.O de un Host" \
+         3 "Escaneo completo a un Host" \
+         4 "Escanear paquetes de tu red actual")
+
+if [ $? -eq 0 ]
+then
+   case $eleccion in
+   
+   1)
+      network_config=$(zenity --forms --title="Configuración de red" \
+											--text="Introduce los valores de configuración de la red:" \
+											--add-entry="Direccion de Red" \
+                                 --add-entry="Mascara" )
+
+      if [ $? -eq 1 ];then   
+         exit 1
+      else
+      ip_address=$(echo $network_config | awk -F '|' '{print $1}')
+		mascara=$(echo $network_config | awk -F '|' '{print $2}')
+      conversorMascara $mascara
+      nmap -sn -v0 $ip_address/$?
+      if [ $? -ne 0 ];then
+      clear
+      zenity --error --text "Valores no validos"
+      exit 1
+      fi        
+      arp -n | grep "ether"
+      fi;;  
+      
+   2)
+      ip=$(zenity --entry \
+                --width=250 \
+                --ok-label="Aceptar" \
+                --text="Introduce la IP del equipo")
+      ./winolinux $ip;;
+   
+   3)
+      host_scan=$(zenity --forms --title="Configuración de red" \
+											--text="Introduce los valores de configuración de la red:" \
+											--add-entry="Direccion IP" )
+      if [ $? -eq 1 ];then   
+         exit 1
+      else
+      ip_address=$(echo $host_scan | awk -F '|' '{print $1}')
+      nmap -p 1-65535 -T4 -A -v $host_scan
+      fi;;
+   4)
+   OPTIONS=$(zenity --list --height 300 --width 400 --title="Seleccionar parámetros de TCPDump" \
+    --checklist --column="Seleccionar" --column="Parámetro" \
+    TRUE "Interfaz de red" \
+    FALSE "Filtro de paquetes" \
+    FALSE "Mostrar paquetes en formato ASCII")
+
+   ifconfig -a
+
+   if [ $? -eq 1 ];then
+      clear  
+      exit 1
+   else
+      INTERFACE=""
+      FILTER=""
+      ASCII_OUTPUT=""
+
+      if echo $OPTIONS | grep -q "Interfaz de red"; then
+         INTERFACE="-i $(zenity --entry --title="Interfaz de red" --text="Introduzca el nombre de la interfaz de red:")"
+      fi
+      if [ $? -eq 1 ];then
+         clear
+         zenity --error --text "Interfaz '$INTERFACE' no valida"
+         exit 0
+      fi
+
+      if echo $OPTIONS | grep -q "Filtro de paquetes"; then
+         FILTER=$(zenity --entry --title="Filtro de paquetes" --text="Introduzca el filtro de paquetes:")
+      fi
+
+      if echo $OPTIONS | grep -q "Mostrar paquetes en formato ASCII"; then
+         ASCII_OUTPUT="-A"
+      fi
+         permisos
+         sudo tcpdump $INTERFACE $FILTER $ASCII_OUTPUT
+      if [ $? -ne 0 ];then
+         clear
+         zenity --error --text "Interfaz '$INTERFACE' no valida"
+      fi
+
+   fi
+   esac   
+fi

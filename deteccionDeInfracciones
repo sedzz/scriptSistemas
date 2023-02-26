@@ -1,0 +1,37 @@
+#!/bin/bash
+sudo find / -name "infraccion-sistema.sh" 2>/dev/null > ruta.txt
+
+# Nombre del servicio
+SERVICE_NAME="infraccionSistema"
+
+# Ruta completa al script que deseas ejecutar
+SCRIPT_PATH=$(cat ruta.txt)
+
+# Nombre de usuario para ejecutar el script
+USERNAME=$USER
+
+# Descripción del servicio
+DESCRIPTION="Script que manda un correo automaticamente cuando ocurre una infraccion en el sistema"
+
+# Crea el archivo del servicio
+sudo tee "/etc/systemd/system/$SERVICE_NAME.service" > /dev/null <<EOF
+[Unit]
+Description=$DESCRIPTION
+
+[Service]
+Type=simple
+ExecStart=$SCRIPT_PATH
+Restart=always
+User=$USERNAME
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+
+sudo systemctl start $SERVICE_NAME
+
+sudo systemctl enable $SERVICE_NAME
+
+

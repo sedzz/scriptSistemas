@@ -1,0 +1,53 @@
+#!/bin/bash
+
+finalizar="false"
+while [ $finalizar = "false" ]
+do
+    op=$(zenity --list  \
+        --column="Opción" --column="Descripcion" --cancel-label="Salir" --title="Hola, $USER" --text="Elige un submenu" --height=250 --width=500 \
+        1 "Gestion de Red" \
+        2 "Servicios y procesos del sistema" \
+        3 "Copias de seguridad")
+
+    if [ $? -eq 0 ]
+    then
+        case $op in
+
+            1) red=$(zenity --list \
+                --column="Opcion" --column="Descripcion" --height=300 --width=500 \
+                1 "Cambiar la IP de la tarjeta de red" \
+                2 "Hosts Remotos")
+                
+                if [ $? -eq 0 ]
+                then
+                    case $red in
+                            1)  
+                                ./cambiar-ip;;                             
+                            2)
+                                ./netscan
+                    esac
+                fi;;
+            2)
+                serv=$(zenity --list \
+                --column="Opcion" --text="Elige una opcion" --column="Descripcion" --height 200 --width 400 \
+                1 "Ver el estado del servicio a buscar" \
+                2 "Matar Proceso por PID")
+
+                if [ $? -eq 0 ]
+                    then
+                    case $serv in
+                    1)
+                    ./servicios;;
+
+                    2)
+                    ./pid
+                    esac
+                fi;;
+            3)
+                ./copiaseguridad   
+        esac
+    else
+    finalizar="true"
+    clear
+    fi
+done

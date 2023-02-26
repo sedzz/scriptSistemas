@@ -1,0 +1,21 @@
+#!/bin/bash
+
+archivo=$(zenity --file-selection --title="Selecciona archivo para hacer copia de seguridad" --filename="$HOME" --file-filter='Archivos de cualquier tipo | *' --file-filter='Archivos normales | *.*')
+
+if [ -n "$archivo" ]; then
+  salida=$(zenity --file-selection --save --title="Selecciona la ubicación de salida para la copia de seguridad" --filename="$HOME/$(basename "$archivo")_$(date +%Y-%m-%d_%H-%M-%S).zip")
+
+  if [ -n "$salida" ]; then
+    if [ -f "$archivo" ]; then
+      copia="$salida"
+      zip "$copia" "$archivo"
+      zenity --info --text="Se ha creado una copia de seguridad del archivo $archivo en $copia"
+    else
+      zenity --error --text="La selección no es un archivo"
+    fi
+  else
+    zenity --error --text="No se ha seleccionado ninguna ubicación de salida para la copia de seguridad"
+  fi
+else
+  zenity --error --text="No se ha seleccionado ningún archivo"
+fi

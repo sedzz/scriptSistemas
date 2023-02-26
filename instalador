@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Identificar la distribución de Linux
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    DISTRIBUTION=${NAME:-$(awk -F= '/^ID/{print $2}' /etc/*-release)}
+elif [ -f /etc/redhat-release ]; then
+    DISTRIBUTION=$(cat /etc/redhat-release | awk '{print $1}')
+else
+    DISTRIBUTION="Desconocido"
+fi
+
+# Instalar paquetes necesarios
+if [[ "$DISTRIBUTION" == "Ubuntu" || "$DISTRIBUTION" == "Debian" ]]; then
+    sudo apt-get install -y net-tools
+    sudo apt install -y nmap 
+    sudo apt install -y zenity 
+    sudo apt install -y tcpdump
+    sudo apt install -y git
+    sudo apt install -y ssmtp
+elif [[ "$DISTRIBUTION" == "CentOS" || "$DISTRIBUTION" == "Red Hat Enterprise Linux" ]]; then
+    sudo yum install -y net-tools
+    sudo yum install -y nmap 
+    sudo yum install -y zenity 
+    sudo yum install -y tcpdump
+    sudo yum install -y git
+    sudo yum install -y ssmtp
+elif [[ "$DISTRIBUTION" == "Fedora" ]]; then
+    sudo dnf install -y net-tools
+    sudo dnf install -y nmap 
+    sudo dnf install -y zenity 
+    sudo dnf install -y tcpdump
+    sudo dnf install -y git
+    sudo dnf install -y ssmtp
+else
+    echo "No se han podido instalar los paquetes"
+fi
+
+git clone https://sedzz/scriptSistemas
+cd scriptSistemas
+chmod +x .*
+
+echo "Escribe tu Direccion de GMAIL donde quieres que te lleguen las alertas"
+read mensaje
+echo "$mensaje" > correo
+
+rm instalador
+

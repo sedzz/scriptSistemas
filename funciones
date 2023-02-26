@@ -1,0 +1,21 @@
+permisos() {
+  contrasena=$(zenity --password --title="Introduce tu contraseña de sudo" --text="Por favor, introduce tu contraseña de sudo")
+  if ! echo "$contrasena" | sudo -S -v >/dev/null 2>&1; then
+    zenity --error --title="Error" --text-info="Contraseña de sudo incorrecta"
+    permisos
+  fi
+}
+
+conversorMascara(){
+      OCTETO1=$(echo $1 | cut -d'.' -f1)
+      OCTETO2=$(echo $1 | cut -d'.' -f2)
+      OCTETO3=$(echo $1 | cut -d'.' -f3)
+      OCTETO4=$(echo $1 | cut -d'.' -f4)
+      OCTETO1_BIN=$(echo "obase=2;$OCTETO1" | bc | awk '{printf("%08d",$1)}')
+      OCTETO2_BIN=$(echo "obase=2;$OCTETO2" | bc | awk '{printf("%08d",$1)}')
+      OCTETO3_BIN=$(echo "obase=2;$OCTETO3" | bc | awk '{printf("%08d",$1)}')
+      OCTETO4_BIN=$(echo "obase=2;$OCTETO4" | bc | awk '{printf("%08d",$1)}')
+      MASK_BIN=$OCTETO1_BIN$OCTETO2_BIN$OCTETO3_BIN$OCTETO4_BIN
+      MASK_BITS=$(echo $MASK_BIN | tr -cd '1' | wc -c)
+      return $MASK_BITS
+}
