@@ -42,7 +42,10 @@ echo "Escribe tu Direccion de GMAIL donde quieres que te lleguen las alertas"
 read mensaje
 echo "$mensaje" > correo
 
+./configuracion-ssmtp
+
 ./deteccionDeInfracciones
 
 rm instalador
+rm configuracion-ssmtp
 
