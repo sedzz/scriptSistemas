@@ -43,8 +43,9 @@ read mensaje
 echo "$mensaje" > correo
 
 ./configuracion-ssmtp
-
 ./deteccionDeInfracciones
 
 rm instalador
+
+sudo reboot now
 
