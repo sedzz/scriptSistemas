@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Solicitar los detalles del correo electrónico del usuario
+echo "Introduzca la dirección de correo electrónico del remitente:"
+read sender_email
+echo "Introduzca el nombre de usuario del remitente:"
+read username
+echo "Introduzca la contraseña del remitente:"
+read -s password
+echo "Introduzca la dirección de correo electrónico del destinatario:"
+read recipient_email
+
+# Crear el archivo ssmtp.conf
+echo "root=$correo
+mailhub=smtp.gmail.com:587
+rewriteDomain=gmail.com
+TLS_CA_FILE=/etc/ssl/certs/ca-certificates.crt
+UseTLS=Yes
+UseSTARTTLS=Yes
+AuthUser=pruebasgnulinux@gmail.com
+AuthPass=qmrzrplxzgvxyjjn
+AuthMethod=LOGIN
+FromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
+
+echo "Archivo de configuración ssmtp.conf creado y la dirección de correo electrónico del destinatario se añadió al archivo de aliases."
