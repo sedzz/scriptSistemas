@@ -9,14 +9,16 @@
   -Por ultimo, aqui podras realizar copias de seguridad de los archivos que quieras, comprimiendolos y eligiendo el output
 
 Para instalar el script:
+!(Ejecuta el instalador con sudo)!
 !(Te pedira el correo electronico donde te llegaran avisos sobre infracciones del sistema)!
+
 ```
 sudo apt update
 sudo apt install git
 git clone https://github.com/sedzz/scriptSistemas.git
 cd scriptSistemas
 chmod +x instalador
-./instalador
+sudo ./instalador
 ```
 Para ejecutar el menu de administracion
 ```
