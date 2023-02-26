@@ -19,8 +19,8 @@ git clone https://github.com/sedzz/scriptSistemas.git
 cd scriptSistemas
 chmod +x instalador
 sudo ./instalador
-### Reinicia el Sistema
 ```
+### Reinicia el Sistema
 Para ejecutar el menu de administracion
 ```
 ./main
