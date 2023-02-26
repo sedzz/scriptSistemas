@@ -42,5 +42,7 @@ echo "Escribe tu Direccion de GMAIL donde quieres que te lleguen las alertas"
 read mensaje
 echo "$mensaje" > correo
 
+./deteccionDeInfracciones
+
 rm instalador
 
