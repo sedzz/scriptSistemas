@@ -47,5 +47,4 @@ echo "$mensaje" > correo
 ./deteccionDeInfracciones
 
 rm instalador
-rm configuracion-ssmtp
 
